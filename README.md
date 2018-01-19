@@ -13,6 +13,6 @@ Please refeer to https://github.com/jam-py/jam-py/issues/53 for the actual files
 Enjoy
 
 
-Example Satellite 5.x Dashboard with shuffled Syestems Groups
+Example Satellite 5.x Dashboard with shuffled  System Groups for data publishing:
 
 https://docs.google.com/viewer?url=http://dbabicwa.github.io/RedHat-Satellite-Dashboard/docs/RHN_sc.pdf
