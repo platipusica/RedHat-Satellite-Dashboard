@@ -1,3 +1,5 @@
 # RedHat-Satellite-Dashboard
-Example Satellite report
-https://dbabicwa.github.io/RedHat-Satellite-Dashboard/docs/RHN_sc.pdf
+
+Example Satellite 5.x Dashboard:
+
+[embed]http://dbabicwa.github.io/RedHat-Satellite-Dashboard/docs/RHN_sc.pdf[/embed]
