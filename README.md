@@ -2,4 +2,4 @@
 
 Example Satellite 5.x Dashboard:
 
-http://dbabicwa.github.io/RedHat-Satellite-Dashboard/docs/RHN_sc.pdf
+https://docs.google.com/viewer?url=http://dbabicwa.github.io/RedHat-Satellite-Dashboard/docs/RHN_sc.pdf
