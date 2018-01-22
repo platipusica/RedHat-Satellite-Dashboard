@@ -14,12 +14,22 @@ On above, the Jam.py shuffled the System Groups name for Internet publishing (ie
 
 It is reveling a lot of information not instantly seen on the Satellite 5.x Overview Tab. For example, we see how dispersed the RAM allocation is on our VmWare infrastructure.
 
-Also, not easy to spot how many running kernels are in production, etc. It is also possible to query any information from the database tables within the application. For example, as seen below in the PDF, we have one workstation with 96 cores. But which one is it, the Manager would ask? Simple, open Satellite tab, Rhncpu table and see it there, or Search for any info.
+Also, not easy to spot how many running kernels are in production, etc. It is also possible to query any information from the database tables within the application. For example, there is one workstation with 96 cores! But which one is it, the Manager would ask? Simple, open Satellite tab, Rhncpu table and see it there, or Search for any info.
 
+
+Supported software
+==================
 
 Please refeer to https://github.com/jam-py/jam-py/issues/53 for the actual files and how to's. 
 
-Example Satellite 5.x Dashboard with shuffled  System Groups for data publishing:
+Requirements
+============
+
+http://jam-py.com/docs/intro/install/install_python.html
+http://jam-py.com/docs/intro/install/package_installation.html
+
+Download the above PDF
+==================
 
 https://docs.google.com/viewer?url=http://dbabicwa.github.io/RedHat-Satellite-Dashboard/docs/RHN_sc.pdf
 
