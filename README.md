@@ -19,7 +19,7 @@ Also, not easy to spot how many running kernels are in production, etc. It is al
 Supported software
 ==================
 
-Red Hat Satellite 5.x, 6.x comming soon.
+Red Hat Satellite 5.x, 6.x coming soon.
 
 Installation
 ============
