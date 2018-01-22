@@ -16,21 +16,29 @@ It is reveling a lot of information not instantly seen on the Satellite 5.x Over
 
 Also, not easy to spot how many running kernels are in production, etc. It is also possible to query any information from the database tables within the application. For example, there is one workstation with 96 cores! But which one is it, the Manager would ask? Simple, open Satellite tab, Rhncpu table and see it there, or Search for any info.
 
-
 Supported software
 ==================
 
-Please refeer to https://github.com/jam-py/jam-py/issues/53 for the actual files and how to's. 
+Red Hat Satellite 5.x, 6.x comming soon.
+
+Installation
+============
+
+Please refer to https://github.com/jam-py/jam-py/issues/53 for the actual files and how to's. 
 
 Requirements
 ============
 
 http://jam-py.com/docs/intro/install/install_python.html
+
 http://jam-py.com/docs/intro/install/package_installation.html
 
+For Satellite with Oracle, the cx_Oracle Python library is needed.
+
 Download the above PDF
-==================
+======================
 
 https://docs.google.com/viewer?url=http://dbabicwa.github.io/RedHat-Satellite-Dashboard/docs/RHN_sc.pdf
 
-Enjoy
+
+Enjoy!
