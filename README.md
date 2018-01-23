@@ -28,6 +28,9 @@ Installation
 
 Please refer to https://github.com/jam-py/jam-py/issues/53 for the actual files and how to's. 
 
+For this app, there is no need to install anything, providing there is a psycopg2 Python lib on your system. 
+Just download the latest file, unpack and run. Set the connection details, and restart the app. Profit.
+
 Requirements
 ============
 
@@ -35,7 +38,7 @@ http://jam-py.com/docs/intro/install/install_python.html
 
 http://jam-py.com/docs/intro/install/package_installation.html
 
-For Satellite with Oracle, the cx_Oracle Python library is needed.
+For Satellite with Oracle, the cx_Oracle Python library is needed. 
 
 Download the above PDF
 ======================
