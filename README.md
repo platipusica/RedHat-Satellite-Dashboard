@@ -4,9 +4,18 @@ Hello,
 
 if anyone still using the Satellite 5.x from RedHat, this might be interesting Dashboard I've created with Jam.py 'magic' framework (https://github.com/jam-py/jam-py), in like one hour (and I'm not a developer).
 
+How does it work?
+=================
+
 Please visit https://goo.gl/j81uDW for short 13 slides Jam.py presentation to get you going. Basically, only Satellite db login info, a bit of c/p and a few imported tables are needed for this app:
 
 ![Example jam.py Satellite Login details](https://user-images.githubusercontent.com/9026100/31700470-2f225d8a-b3fc-11e7-8085-285e51164a88.png  "Example jam.py Satellite Login details")
+
+What does a report look like?
+=============================
+
+Imagine hundreds or thousands of RHEL Servers connecting to Satellite. This Dash will show live data, and it is extensible to any graphs you can imagine in fastest time possible. **No need to learn SQL, bootstrap, Django or hibernate to name a few.**
+
 
 ![rhn_black_raster-0](https://user-images.githubusercontent.com/9026100/35200887-76c7f3b2-ff50-11e7-8cd0-a536d1a971b7.png)
 ![rhn_black_raster-1](https://user-images.githubusercontent.com/9026100/35200888-7ae84ffa-ff50-11e7-9527-c1f1432954c2.png)
