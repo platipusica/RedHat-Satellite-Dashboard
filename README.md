@@ -2,7 +2,7 @@
 
 Hello,
 
-if anyone still using the Satellite 5.x from RedHat, this might be interesting Dashboard I've created with Jam.py framework (https://github.com/jam-py/jam-py), in like one hour (and I'm not a developer).
+if anyone still using the Satellite 5.x from RedHat, this might be interesting Dashboard I've created with Jam.py 'magic' framework (https://github.com/jam-py/jam-py), in like one hour (and I'm not a developer).
 
 Please visit https://goo.gl/j81uDW for short 13 slides Jam.py presentation to get you going. Basically, only Satellite db login info, a bit of c/p and a few imported tables are needed for this app:
 
