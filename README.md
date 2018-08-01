@@ -52,7 +52,7 @@ For Satellite with Oracle, the cx_Oracle Python library is needed.
 Download the above PDF
 ======================
 
-https://docs.google.com/viewer?url=http://dbabicwa.github.io/RedHat-Satellite-Dashboard/docs/RHN_sc.pdf
+https://docs.google.com/viewer?url=http://platipusica.github.io/RedHat-Satellite-Dashboard/docs/RHN_sc.pdf
 
 
 Enjoy!
