@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title></title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="/jam/img/j.png" type="image/png">
+
+    <link href="jam/css/bootstrap.css" rel="stylesheet">
+
+    <link href="jam/css/bootstrap-responsive.css" rel="stylesheet">
+    <link href="jam/css/bootstrap-modal.css" rel="stylesheet">
+    <link href="jam/css/datepicker.css" rel="stylesheet">
+    <link href="jam/css/jam.css" rel="stylesheet">
+    <!--<link href="jam/css/jam.css" rel="stylesheet">    -->
+    <link href="css/project.css" rel="stylesheet">
+  </head>
+
+  <body>
+    <div id="container" class="container">
+        <div class="row-fluid">
+            <div class="span6">
+                <h3 id="title" class="muted"></h3>
+            </div>
+            <div class="span6 logging-info">
+                <span id="user-info"></span>
+                <a href="#" id="log-out" style="display: none">&nbsp;&nbsp;&nbsp;Log out</a>
+            </div>
+        </div>
+        <div class="container" style="width: auto;">
+            <div id="taskmenu" class="navbar" style="display: none">
+                <div class="navbar-inner">
+                    <ul id="menu" class="nav">
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div id="content">
+        </div>
+    </div>
+
+    <div class="templates" style="display: none">
+
+        <div class="default-view">
+            <div class="form-body">
+            </div>
+            <div class="form-footer">
+                <button id="delete-btn" class="btn expanded-btn pull-left" type="button">
+                    <i class="icon-trash"></i> Delete<small class="muted">&nbsp;[Ctrl+Del]</small>
+                </button>
+                <div id="report-btn" class="btn-group dropup">
+                    <a class="btn expanded-btn dropdown-toggle" data-toggle="dropdown" href="#">
+                        <i class="icon-print"></i> Reports
+                        <span class="caret"></span>
+                    </a>
+                    <ul class="dropdown-menu bottom-up">
+                    </ul>
+                </div>
+                <button id="edit-btn" class="btn expanded-btn" type="button">
+                    <i class="icon-edit"></i> Edit
+                </button>
+                <button id="new-btn" class="btn expanded-btn" type="button">
+                    <i class="icon-plus"></i> New<small class="muted">&nbsp;[Ctrl+Ins]</small>
+                </button>
+            </div>
+        </div>
+
+        <div class="default-edit default-details-edit">
+            <div class="form-body">
+                <div class="edit-body">
+                </div>
+            </div>
+            <div class="form-footer">
+                <!--<button type="button" id="ok-btn" class="btn btn-ary expanded-btn">-->
+                <!--    <i class="icon-ok"></i> OK<small class="muted">&nbsp;[Ctrl+Enter]</small>-->
+                <!--</button>-->
+                <button type="button" id="cancel-btn" class="btn expanded-btn">
+                    <i class="icon-remove"></i> Close
+                </button>
+            </div>
+        </div>
+
+        <div class="servers-edit">
+            <div class="form-body">
+                <div class="edit-body">
+                </div>
+            </div>
+            <div class="form-footer">
+                <button type="button" id="ok-btn" class="btn btn-ary expanded-btn">
+                    <i class="icon-ok"></i> OK<small class="muted">&nbsp;[Ctrl+Enter]</small>
+                </button>
+                <button type="button" id="cancel-btn" class="btn expanded-btn">
+                    <i class="icon-remove"></i> Close
+                </button>
+            </div>
+        </div>
+
+        <div class="default-param">
+            <div class="form-body">
+                <div class="edit-body">
+                </div>
+            </div>
+            <div class="form-footer">
+                <select id='extension' class="pull-left" style="width: 60px">
+                    <option>pdf</option>
+                    <option>ods</option>
+                    <option>xls</option>
+                    <option>html</option>
+                </select>
+                <button type="button" id="ok-btn" class="btn expanded-btn">
+                    <i class="icon-print"></i> Print
+                </button>
+                <button type="button" id="cancel-btn" class="btn expanded-btn">
+                    <i class="icon-remove"></i> Close
+                </button>
+            </div>
+        </div>
+
+        <div class="default-filter">
+            <div class="form-body">
+                <div class="edit-body">
+                </div>
+            </div>
+            <div class="form-footer">
+                <button type="button" id="ok-btn" class="btn expanded-btn">
+                    <i class="icon-filter"></i> Apply
+                </button>
+                <button type="button" id="cancel-btn" class="btn expanded-btn">
+                    <i class="icon-remove"></i> Close
+                </button>
+            </div>
+        </div>
+
+        <div class="catalogs-view satellite-view">
+            <div class="form-body">
+                <div class="view-table">
+                </div>
+            </div>
+            <!--<div class="form-footer">-->
+            <!--    <button id="delete-btn" class="btn expanded-btn pull-left" type="button">-->
+            <!--        <i class="icon-trash"></i> Delete<small class="muted">&nbsp;[Ctrl+Del]</small>-->
+            <!--    </button>-->
+            <!--    <div id="report-btn" class="btn-group dropup">-->
+            <!--        <a class="btn expanded-btn dropdown-toggle" data-toggle="dropdown" href="#">-->
+            <!--            <i class="icon-print"></i> Reports-->
+            <!--            <span class="caret"></span>-->
+            <!--        </a>-->
+            <!--        <ul class="dropdown-menu bottom-up">-->
+            <!--        </ul>-->
+            <!--    </div>-->
+            <!--    <button id="edit-btn" class="btn expanded-btn" type="button">-->
+            <!--        <i class="icon-edit"></i> Edit-->
+            <!--    </button>-->
+            <!--    <button id="new-btn" class="btn expanded-btn" type="button">-->
+            <!--        <i class="icon-plus"></i> New<small class="muted">&nbsp;[Ctrl+Ins]</small>-->
+            <!--    </button>-->
+            <!--</div>-->
+        </div>
+
+        <div class="journals-view">
+            <div class="form-body">
+                <div class="form-header">
+                    <h4 id="form-title" class="header-text"><a href="#"></a></h4>
+                    <h5 id="filter-text" class="header-text pull-right"></h5>
+                </div>
+                <div class="view-table">
+                </div>
+            </div>
+            <div class="form-footer">
+                <button id="delete-btn" class="btn expanded-btn pull-left" type="button">
+                    <i class="icon-trash"></i> Delete<small class="muted">&nbsp;[Ctrl+Del]</small>
+                </button>
+                <div id="report-btn" class="btn-group dropup">
+                    <a class="btn expanded-btn dropdown-toggle" data-toggle="dropdown" href="#">
+                        <i class="icon-print"></i> Reports
+                        <span class="caret"></span>
+                    </a>
+                    <ul class="dropdown-menu bottom-up">
+                    </ul>
+                </div>
+                <button id="filter-btn" class="btn expanded-btn" type="button">
+                    <i class="icon-filter"></i> Filter
+                </button>
+                <button id="edit-btn" class="btn expanded-btn" type="button">
+                    <i class="icon-edit"></i> Edit
+                </button>
+                <button id="new-btn" class="btn expanded-btn" type="button">
+                    <i class="icon-plus"></i> New<small class="muted">&nbsp;[Ctrl+Ins]</small>
+                </button>
+            </div>
+        </div>
+        
+        <div class="dashbord-view">
+            <div id=cur-server>
+            </div>
+            <div class="row-fluid">
+                <div class="span6">                
+                    <canvas id="sg-canvas"></canvas>                
+                    <div id="sg-table"></div>
+                </div>         
+                <div class="span6">                        
+                    <canvas id="rk-canvas"></canvas>
+                    <div id="rk-table"></div>
+                </div>                
+            </div>
+            <div class="row-fluid">            
+                <div class="span6">
+                    <canvas id="ram-canvas"></canvas>
+                    <div id="ram-table"></div>
+                </div>
+                <div class="span6">
+                    <canvas id="cpu-canvas"></canvas>
+                    <div id="cpu-table"></div>
+                </div>
+            </div>
+            <div class="row-fluid">            
+                <div class="span6">
+                    <canvas id="arch-canvas"></canvas>
+                    <div id="arch-table"></div>
+                </div>
+                <div class="span6">
+                    <canvas id="product-canvas"></canvas>
+                    <div id="prd-table"></div>
+                </div>
+            </div>
+        </div>        
+
+        <form id="login-form" target="dummy" class="form-horizontal" data-caption="Log in" style="margin: 10px 0 0; padding: 0px">
+            <div class="control-group">
+                <label class="control-label" for="inputLoging">Login</label>
+                <div class="controls">
+                    <input type="text" id="inputLoging" name="username" tabindex="1" placeholder="login">
+                </div>
+            </div>
+            <div class="control-group">
+                <label class="control-label" for="inputPassword">Password</label>
+                <div class="controls">
+                    <input type="password" id="inputPassword" name="password" tabindex="2" placeholder="password">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <input type="submit" class="btn expanded-btn pull-right" id="login-btn" value="OK" tabindex="3">
+            </div>
+        </form>
+    </div>
+    <iframe src="dummy.html" name="dummy" style="display: none"></iframe>
+
+    <script src="jam/js/jquery.js"></script>
+    <script src="jam/js/bootstrap.js"></script>
+    <script src="jam/js/bootstrap-modal.js"></script>
+    <script src="jam/js/bootstrap-modalmanager.js"></script>
+    <script src="jam/js/bootstrap-datepicker.js"></script>
+    <script src="jam/js/md5.js"></script>
+    <script src="jam/js/ace/ace.js" type="text/javascript" charset="utf-8"></script>
+    <script src="jam/js/jam.js"></script>
+    <script src="static/js/Chart.min.js"></script>    
+
+    <script>
+    $(document).ready(function(){
+        task.load()
+      });
+    </script>
+
+  </body>
+</html>
