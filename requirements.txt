@@ -1,2 +1,3 @@
+python-psycopg2
 gunicorn
 jam.py==5.4.24
