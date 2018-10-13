@@ -7,7 +7,7 @@ if anyone still using the Satellite 5.x from RedHat, this might be interesting D
 How does it work?
 =================
 
-Please visit https://goo.gl/j81uDW for short 13 slides Jam.py presentation to get you going. Basically, only Satellite db login info, a bit of c/p and a few imported tables are needed for this app:
+Please visit https://goo.gl/j81uDW for short 13 slides Jam.py v4.x presentation to get you going. Basically, only Satellite db login info, a bit of c/p and a few imported tables are needed for this app:
 
 ![Example jam.py Satellite Login details](https://user-images.githubusercontent.com/9026100/31700470-2f225d8a-b3fc-11e7-8085-285e51164a88.png  "Example jam.py Satellite Login details")
 
@@ -35,10 +35,20 @@ Red Hat Satellite 5.x, 6.x coming soon.
 Installation
 ============
 
-Please refer to https://github.com/jam-py/jam-py/issues/53 for the actual files and how to's. 
-
 For this app, there is no need to install anything, providing there is a psycopg2 Python lib on your system. 
-Just download the latest file, unpack and run. Set the connection details, and restart the app. Profit.
+Just download the latest file, unpack and run from unzipped folder with:
+
+python server.py
+
+The App will run at http://localhost:8080
+
+Open the App Builder, Set the connection details on Project/Database, and restart the app. If there are more Satellites in your Org, open Task/Server Module [F9], and uncomment from below:
+```
+### to connect to real Satellites #2, #3..., providing 1st Satellite is set on Project/Database
+#import psycopg2 
+```
+Profit.
+
 
 Requirements
 ============
@@ -48,11 +58,5 @@ http://jam-py.com/docs/intro/install/install_python.html
 http://jam-py.com/docs/intro/install/package_installation.html
 
 For Satellite with Oracle, the cx_Oracle Python library is needed. 
-
-Download the above PDF
-======================
-
-https://docs.google.com/viewer?url=http://platipusica.github.io/RedHat-Satellite-Dashboard/docs/RHN_sc.pdf
-
 
 Enjoy!
