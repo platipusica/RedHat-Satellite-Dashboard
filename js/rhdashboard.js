@@ -17,45 +17,64 @@ function Events1() { // rhdashboard
 				task.logout();
 			}); 
 		}
+		
+		if (task.full_width) {
+			$('#container').removeClass('container').addClass('container-fluid');
+		}
+		$('#container').show();
+		
+		task.dashboard.open({open_empty: true});
+		task.dashboard.append();
+		task.dashboard.cur_server.value = 1;
+		task.dashboard.create_inputs($('.select-server'), {in_well: false, label_size: 2});``
+		
+		task.create_menu($("#menu"), $("#content"), {
+			splash_screen: '<h1 class="text-center">RedHat Satellite 5.x Dashboard</h1>',
+			view_first: true
+		});
+		$("#menu-right #admin a").click(function(e) {
+			var admin = [location.protocol, '//', location.host, location.pathname, 'builder.html'].join('');
+			e.preventDefault();
+			window.open(admin, '_blank');
+		});
+		$("#menu-right #about a").click(function(e) {
+			e.preventDefault();
+			task.message(
+				task.templates.find('.about'),
+				{title: 'Jam.py framework', margin: 0, text_center: true, 
+					buttons: {"OK": undefined}, center_buttons: true}
+			);
+		});
 	
-		$("#taskmenu").show();
-		
-		task.dashbord.open({open_empty: true});
-		task.dashbord.append();
-		task.dashbord.cur_server.value = 1;
-		
-		task.create_menu($("#menu"), true);
+		// $(document).ajaxStart(function() { $("html").addClass("wait"); });
+		// $(document).ajaxStop(function() { $("html").removeClass("wait"); });
 	} 
 	
 	function on_view_form_created(item) {
-		var table_options = {
-				height: 620,
-				sortable: true
-			};
-	  
-		if (!item.master) {
-			item.paginate = true;
-		}
+		var table_height = item.table_options.height, 
+			height,
+			detail,
+			detail_container;
 	
-		item.read_only = true;
 		item.clear_filters();
-	
 		if (item.view_form.hasClass('modal')) {
-			item.view_options.width = 1100;
-			item.view_form.find("#form-title").hide();
+			item.view_options.width = 1060;
+			table_height = $(window).height() - 300;
 		}
 		else {
-			item.view_form.find("#form-title a").text(item.item_caption)
-				.click(function(e) {
-					e.preventDefault();
-					item.view(item.view_form.parent());
-				});
-			table_options.height = $(window).height() - $('body').height() - 20;
+			if (!table_height) {
+				table_height = $(window).height() - $('body').height() - 20;
+			}
 		}
 		if (item.can_create()) {
 			item.view_form.find("#new-btn").on('click.task', function(e) { 
 				e.preventDefault();
-				item.insert_record(); 
+				if (item.master) {
+					item.append_record();
+				}
+				else {
+					item.insert_record();				
+				}
 			});
 		}
 		else {
@@ -64,46 +83,83 @@ function Events1() { // rhdashboard
 		
 		item.view_form.find("#edit-btn").on('click.task', function(e) { 
 			e.preventDefault();
-			item.edit_record(); 
+			item.edit_record();
 		});
 		
 		if (item.can_delete()) {
 			item.view_form.find("#delete-btn").on('click.task', function(e) { 
+				e.preventDefault();
 				item.delete_record(); 
-				e.preventDefault();	
 			});
 		}
 		else {
 			item.view_form.find("#delete-btn").prop("disabled", true);
 		}
 		
-		create_print_btns(item);
-	
-		if (item.view_form.find(".view-table").length) {
-			if (item.init_table) {
-				item.init_table(item, table_options);
-			}
-			item.create_table(item.view_form.find(".view-table"), table_options);
-			item.open({params: {server: task.dashbord.cur_server.value}}, true);
+		if (!item.master && item.owner.on_view_form_created) {
+			item.owner.on_view_form_created(item);
 		}
+	
+		if (item.on_view_form_created) {
+			item.on_view_form_created(item);
+		}
+		
+		if (item.view_form.find(".view-table").length) {
+			if (item.view_options.view_detail) {
+				detail_container = item.view_form.find('.view-detail');
+				if (detail_container) {
+					height = item.view_options.detail_height;
+					if (!height) {
+						height = 200;
+					}
+					item.create_detail_table(detail_container, {height: height});
+					table_height -= height;
+				}
+			}
+			if (item.master) {
+				table_height = item.master.edit_options.detail_height;
+				if (!table_height) {
+					table_height = 260;
+				}
+			}
+			if (!item.table_options.height) {
+				item.table_options.height = table_height;
+			}
+			item.create_table(item.view_form.find(".view-table"));
+			if (!item.master && !item.virtual_table) {
+				item.open({params: {server: task.dashboard.cur_server.value}}, true);
+			}
+		}
+		create_print_btns(item);
+		return true;
+	}
+	
+	function on_view_form_shown(item) {
+		item.view_form.find('.dbtable.' + item.item_name + ' .inner-table').focus();
 	}
 	
 	function on_view_form_closed(item) {
-		item.close();
+		if (!item.master && !item.virtual_table) {
+			item.close();
+		}
 	}
 	
 	function on_edit_form_created(item) {
-		var options = {
-				col_count: 1
-			};
-		if (item.init_inputs) {
-			item.init_inputs(item, options);
-		}
-		if (item.edit_form.find(".edit-body").length) {
-			item.create_inputs(item.edit_form.find(".edit-body"), options);
-		}
 		item.edit_form.find("#cancel-btn").on('click.task', function(e) { item.cancel_edit(e) });
 		item.edit_form.find("#ok-btn").on('click.task', function() { item.apply_record() });
+		
+		if (!item.master && item.owner.on_edit_form_created) {
+			item.owner.on_edit_form_created(item);
+		}
+	
+		if (item.on_edit_form_created) {
+			item.on_edit_form_created(item);
+		}
+			
+		item.create_inputs(item.edit_form.find(".edit-body"));
+		item.create_detail_views(item.edit_form.find(".edit-detail"));
+	
+		return true;
 	}
 	
 	function on_edit_form_close_query(item) {
@@ -121,27 +177,33 @@ function Events1() { // rhdashboard
 				result = false;
 			}
 			else {
-				item.cancel();
+				item.cancel_edit();
 			}
 		}
 		return result;
 	}
 	
 	function on_filter_form_created(item) {
-		item.filter_options.title = item.item_caption + ' - filter';
+		item.filter_options.title = item.item_caption + ' - filters';
+		// item.filter_options.close_focusout = true;
 		item.create_filter_inputs(item.filter_form.find(".edit-body"));
-		item.filter_form.find("#cancel-btn")
-			.on('click.task', function() { item.close_filter_form() });
-		item.filter_form.find("#ok-btn")
-			.on('click.task', function() { item.apply_filters() });
+		item.filter_form.find("#cancel-btn").on('click.task', function() {
+			item.close_filter_form(); 
+		});
+		item.filter_form.find("#ok-btn").on('click.task', function() { 
+			item.set_order_by(item.view_options.default_order);
+			item.apply_filters(item._search_params); 
+		});
 	}
 	
 	function on_param_form_created(item) {
 		item.create_param_inputs(item.param_form.find(".edit-body"));
-		item.param_form.find("#cancel-btn")
-			.on('click.task', function() { item.close_param_form() });
-		item.param_form.find("#ok-btn")
-			.on('click.task', function() { item.process_report() });
+		item.param_form.find("#cancel-btn").on('click.task', function() { 
+			item.close_param_form();
+		});
+		item.param_form.find("#ok-btn").on('click.task', function() { 
+			item.process_report();
+		});
 	}
 	
 	function on_before_print_report(report) {
@@ -157,16 +219,21 @@ function Events1() { // rhdashboard
 	
 	function on_view_form_keyup(item, event) {
 		if (event.keyCode === 45 && event.ctrlKey === true){
-			item.insert_record();
+			if (item.master) {
+				item.append_record();
+			}
+			else {
+				item.insert_record();				
+			}
 		}
 		else if (event.keyCode === 46 && event.ctrlKey === true){
-			item.delete_record();
+			item.delete_record(); 
 		}
 	}
 	
 	function on_edit_form_keyup(item, event) {
 		if (event.keyCode === 13 && event.ctrlKey === true){
-			item.edit_form.find("#ok-btn").focus();
+			item.edit_form.find("#ok-btn").focus(); 
 			item.apply_record();
 		}
 	}
@@ -204,6 +271,7 @@ function Events1() { // rhdashboard
 	}
 	this.on_page_loaded = on_page_loaded;
 	this.on_view_form_created = on_view_form_created;
+	this.on_view_form_shown = on_view_form_shown;
 	this.on_view_form_closed = on_view_form_closed;
 	this.on_edit_form_created = on_edit_form_created;
 	this.on_edit_form_close_query = on_edit_form_close_query;
@@ -217,156 +285,6 @@ function Events1() { // rhdashboard
 
 task.events.events1 = new Events1();
 
-function Events2() { // rhdashboard.catalogs 
-
-	function on_view_form_created(item) {
-		var timeOut,
-			i,
-			search,
-			captions = [],
-			field,
-			search_field;
-		if (item.default_field) {
-			search_field = item.default_field.field_name;
-			if (item.lookup_field && item.lookup_field.value && !item.lookup_field.multi_select) {
-				item.view_form.find("#selected-value")
-					.text(item.lookup_field.display_text)
-					.click(function() {
-						item.view_form.find('#search-input').val(item.lookup_field.lookup_text);					
-						item.search(item.default_field.field_name, item.lookup_field.lookup_text);
-					});
-				item.view_form.find("#selected-div").css('display', 'inline-block');
-			}
-			item.view_form.find('#search-fieldname').text(
-				item.field_by_name(search_field).field_caption);
-			item.view_form.find('#search-field-info')
-				.popover({
-					container: 'body',
-					placement: 'left',
-					trigger: 'hover',
-					title: 'Search field selection',
-					content: 'To select a search field hold Ctrl key and click on the corresponding column of the table.'
-				})
-				.click(function(e) {
-					e.preventDefault();
-				});
-			search = item.view_form.find("#search-input");
-			search.on('input', function() {
-				var input = $(this);
-				search.css('font-weight', 'normal');
-				clearTimeout(timeOut);
-				timeOut = setTimeout(function() {
-						var field = item.field_by_name(search_field),
-							search_type = 'contains_all';
-						if (field.lookup_type !== 'text') {
-							search_type = 'eq';
-						}
-						item.search(search_field, input.val(), search_type, function() {
-							search.css('font-weight', 'bold');
-						});
-					},
-					500
-				);
-			});
-			search.keydown(function(e) {
-				var code = e.which;
-				if (code === 13) {
-					e.preventDefault();
-				}
-				else if (code === 40) {
-					item.view_form.find('.dbtable.' + item.item_name + ' .inner-table').focus();
-	//				item.view_form.find(".inner-table").focus();
-					e.preventDefault();
-				}
-			});
-			item.view_form.on('keydown', function(e) {
-				var code = e.which;
-				if (isCharCode(code) || code === 8) {				
-					if (!search.is(":focus")) {
-						if (code !== 8) {
-							search.val('');
-						}
-						search.focus();
-					}
-				}
-			});
-			item.view_form.on('click.search', '.dbtable.' + item.item_name + ' .inner-table td', function(e) {
-				var field;
-				if (e.ctrlKey) {			
-					if (search_field !== $(this).data('field_name')) {
-						search_field = $(this).data('field_name');
-						field = item.field_by_name(search_field);
-						if (field && field.lookup_type !== "blob" && field.lookup_type !== "currency" &&
-							field.lookup_type !== "float" && field.lookup_type !== "boolean" && 
-							field.lookup_type !== "date" && field.lookup_type !== "datetime") {
-							item.view_form.find('#search-fieldname')
-								.text(item.field_by_name(search_field).field_caption);
-							item.view_form.find("#search-input").val('');
-						}
-					}
-				}
-			});
-		}
-		else {
-			item.view_form.find("#search-form").hide();
-		}
-	}
-	
-	function isCharCode(code) {
-		if (code >= 48 && code <= 57 || code >= 96 && code <= 105 || 
-			code >= 65 && code <= 90 || code >= 186 && code <= 192 || 
-			code >= 219 && code <= 222) {
-			return true;
-		}
-	}
-	
-	function on_view_form_shown(item) {
-		if (item.default_field) {
-			item.view_form.find("#search-input").focus();
-		}
-		else {
-			item.view_form.find('.dbtable.' + item.item_name + ' .inner-table').focus();
-		}
-	}
-	this.on_view_form_created = on_view_form_created;
-	this.isCharCode = isCharCode;
-	this.on_view_form_shown = on_view_form_shown;
-}
-
-task.events.events2 = new Events2();
-
-function Events3() { // rhdashboard.journals 
-
-	function on_view_form_created(item) { 
-		item.view_form.find("#filter-btn").click(function() {item.create_filter_form()});	
-		if (!item.on_filters_applied) {
-			item.on_filters_applied = function() {
-				if (item.view_form) {
-					item.view_form.find("#filter-text").text(item.get_filter_text());		
-				}
-			};
-		}
-	}
-	
-	function on_view_form_shown(item) {
-		item.view_form.find('.dbtable.' + item.item_name + ' .inner-table').focus();
-	}
-	this.on_view_form_created = on_view_form_created;
-	this.on_view_form_shown = on_view_form_shown;
-}
-
-task.events.events3 = new Events3();
-
-function Events6() { // rhdashboard.satellite 
-
-	function on_view_form_created(item) {
-		task.catalogs.on_view_form_created(item);
-	}
-	this.on_view_form_created = on_view_form_created;
-}
-
-task.events.events6 = new Events6();
-
 function Events8() { // rhdashboard.satellite.rhnserver 
 
 	function on_after_scroll(item) {
@@ -379,21 +297,22 @@ function Events8() { // rhdashboard.satellite.rhnserver
 
 task.events.events8 = new Events8();
 
-function Events14() { // rhdashboard.analitics.dashbord 
+function Events14() { // rhdashboard.analitics.dashboard 
 
 	function on_view_form_created(item) {
 		item.charts = {};
 		item.read_only = false;
-		item.create_inputs(item.view_form.find('#cur-server'), {col_count: 2, in_well: false});
 		show_charts(item);
 	}
 	
 	function on_field_changed(field, lookup_item) {
 		var item = field.owner;
-		$("#title").text(task.item_caption + ' - ' + item.cur_server.display_text);
 		show_charts(item);
-		
-		//empty previous graphs
+		task.satellite.each_item(function(i) {
+		   if (i.active) {
+			   i.open({params: {server: item.cur_server.value}});
+		   }
+		});
 	}
 	
 	function show_charts(item) {
@@ -430,7 +349,6 @@ function Events14() { // rhdashboard.analitics.dashbord
 			}
 		};
 		
-	//	sg.open(where={'group_type':0});
 		sg.set_where({group_type__isnull: 1});
 		sg.open(
 			{
@@ -453,7 +371,7 @@ function Events14() { // rhdashboard.analitics.dashbord
 				sg.current_members.field_caption = 'Number of Servers';			
 				draw_chart(item, ctx, labels, data, colors, 'Ten most System Groups');
 				sg.create_table(item.view_form.find('#sg-table'), 
-					{row_count: 10, dblclick_edit: false});
+					{row_count: 10, dblclick_edit: false, row_line_count: 1});
 			}
 		);
 		return sg;
@@ -461,7 +379,6 @@ function Events14() { // rhdashboard.analitics.dashbord
 	function show_runningkernel(item, ctx) {
 		var rk = item.task.rhnserver.copy({handlers: false});
 		
-		//rk.set_where({group_type__isnull: 1});
 		rk.open(
 			{
 				params: {server: item.cur_server.value},
@@ -485,7 +402,7 @@ function Events14() { // rhdashboard.analitics.dashbord
 				rk.id.field_caption = 'Number of Servers';			
 				draw_chart(item, ctx, labels, data, colors, 'Ten most Running Kernels');
 				rk.create_table(item.view_form.find('#rk-table'), 
-					{fields: ['running_kernel', 'id'], row_count: 10, dblclick_edit: false});
+					{fields: ['running_kernel', 'id'], row_count: 10, dblclick_edit: false, row_line_count: 1});
 			}
 		);
 		return rk;
@@ -517,7 +434,7 @@ function Events14() { // rhdashboard.analitics.dashbord
 				ram.ram.field_caption = 'Memory Used';
 				draw_chart(item, ctx, labels, data, colors, 'Top 8 Memory Used in MB');
 				ram.create_table(item.view$('#ram-table'),
-					{row_count: 8, dblclick_edit: false});
+					{row_count: 8, dblclick_edit: false, row_line_count: 1});
 			}
 		);
 		return ram;
@@ -549,7 +466,7 @@ function Events14() { // rhdashboard.analitics.dashbord
 				cpu.nrcpu.field_caption = 'Number of Cores';
 				draw_chart(item, ctx, labels, data, colors, 'Top 8 Number of Cores');
 				cpu.create_table(item.view$('#cpu-table'),
-					{row_count: 8, dblclick_edit: false});
+					{row_count: 8, dblclick_edit: false, row_line_count: 1});
 			}
 		);
 		return cpu;
@@ -559,7 +476,6 @@ function Events14() { // rhdashboard.analitics.dashbord
 		ar.open(
 			{
 				params: {server: item.cur_server.value},
-	 //		   expanded: false,			
 				fields: ['server_arch_id', 'id'],
 				funcs: {id: 'count'},			
 				group_by: ['server_arch_id'],
@@ -581,7 +497,7 @@ function Events14() { // rhdashboard.analitics.dashbord
 				ar.id.field_caption = 'Number of Servers';			
 				draw_chart(item, ctx, labels, data, colors, 'Ten most Running Archs');
 				ar.create_table(item.view_form.find('#arch-table'), 
-					{fields: ['server_arch_id', 'id'], row_count: 10, dblclick_edit: false});
+					{fields: ['server_arch_id', 'id'], row_count: 10, dblclick_edit: false, row_line_count: 1});
 			}
 		);
 		return ar;
@@ -614,7 +530,7 @@ function Events14() { // rhdashboard.analitics.dashbord
 				prd.server_id.field_caption = 'Number of Servers';			
 				draw_chart(item, ctx, labels, data, colors, 'Ten most Vendor Products');
 				prd.create_table(item.view_form.find('#prd-table'), 
-					{row_count: 10, dblclick_edit: false});
+					{row_count: 10, dblclick_edit: false, row_line_count: 1});
 			}
 		);
 		return prd;
