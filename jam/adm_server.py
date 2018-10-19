@@ -2068,7 +2068,7 @@ def server_save_edit(task, item_id, text, is_server):
             js_funcs = parse_js(text)
     except Exception as e:
         try:
-            print 7777, e
+            #print 7777, e
             err_str = e.args[0]
             line, err = err_str.split(':')
             try:
