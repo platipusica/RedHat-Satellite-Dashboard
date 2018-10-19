@@ -26,24 +26,11 @@ function Events1() { // rhdashboard
 		task.dashboard.open({open_empty: true});
 		task.dashboard.append();
 		task.dashboard.cur_server.value = 1;
-		task.dashboard.create_inputs($('.select-server'), {in_well: false, label_size: 2});``
+		task.dashboard.create_inputs($('.select-server'), {in_well: false, label_size: 2});
 		
 		task.create_menu($("#menu"), $("#content"), {
 			splash_screen: '<h1 class="text-center">RedHat Satellite 5.x Dashboard</h1>',
 			view_first: true
-		});
-		$("#menu-right #admin a").click(function(e) {
-			var admin = [location.protocol, '//', location.host, location.pathname, 'builder.html'].join('');
-			e.preventDefault();
-			window.open(admin, '_blank');
-		});
-		$("#menu-right #about a").click(function(e) {
-			e.preventDefault();
-			task.message(
-				task.templates.find('.about'),
-				{title: 'Jam.py framework', margin: 0, text_center: true, 
-					buttons: {"OK": undefined}, center_buttons: true}
-			);
 		});
 	
 		// $(document).ajaxStart(function() { $("html").addClass("wait"); });
@@ -126,7 +113,7 @@ function Events1() { // rhdashboard
 				item.table_options.height = table_height;
 			}
 			item.create_table(item.view_form.find(".view-table"));
-			if (!item.master && !item.virtual_table) {
+			if (!item.master) {
 				item.open({params: {server: task.dashboard.cur_server.value}}, true);
 			}
 		}
@@ -139,9 +126,9 @@ function Events1() { // rhdashboard
 	}
 	
 	function on_view_form_closed(item) {
-		if (!item.master && !item.virtual_table) {
-			item.close();
-		}
+		// if (!item.master) {
+		//	 item.close();
+		// }
 	}
 	
 	function on_edit_form_created(item) {
