@@ -1919,6 +1919,73 @@
             }
         },
 
+        upload_file: function(options, form, event) {
+            var xhr = new XMLHttpRequest(),
+                formData = new FormData(form.get(0)),
+                message;
+            if (options.blob) {
+                formData.append("file", options.blob);
+            }
+            formData.append("file_name", options.file_name);
+            formData.append("path", options.path);
+            formData.append("task_id", self.ID);
+            xhr.open('POST', 'upload', true);
+            if (options.callback) {
+                xhr.onload = function(e) {
+                    var response,
+                        data;
+                    if (e.currentTarget.status === 200) {
+                        response = JSON.parse(e.currentTarget.response);
+                        if (response.error) {
+                            self.alert_error(response.error, {duration: 10});
+                        }
+                        else if (options.callback) {
+                            data = response.result.data;
+                            options.callback.call(self, data.file_name, options.file_name, data.path);
+                        }
+                    }
+                    else {
+                        self.alert_error(e.currentTarget.statusText, {duration: 10})
+                        if (message) {
+                            self.hide_message(message);
+                        }
+                    }
+                };
+            }
+            if (options.show_progress) {
+                xhr.upload.onprogress = function(e) {
+                    var percent,
+                        pb =
+                        '<div class="progress">' +
+                            '<div class="bar" style="width: 0%;"></div>' +
+
+                        '</div>' +
+                        '<div class="percent text-center"></div>';
+                    if (e.loaded === e.total) {
+                        if (message) {
+                            self.hide_message(message);
+                        }
+                    }
+                    else {
+                        if (!message) {
+                            message = self.message(pb,
+                                {margin: "20px 20px", text_center: true, width: 500});
+                        }
+                        else {
+                            percent = parseInt(100 * e.loaded / e.total, 10) + '%';
+                            message.find('.bar').width(percent);
+                            message.find('.percent').html('<b>' + percent + '</b>');
+                        }
+                    }
+                }
+            }
+
+            if (event) {
+                event.preventDefault();
+            }
+            xhr.send(formData);
+        },
+
         upload: function() {
             var self = this,
                 args = this._check_args(arguments),
@@ -1927,12 +1994,15 @@
                 default_options = {
                     callback: undefined,
                     show_progress: true,
-                    accept: undefined
+                    accept: undefined,
+                    blob: undefined,
+                    file_name: undefined
                 },
-                message,
                 accept = '',
                 form,
-                button;
+                file,
+                button,
+                submit_button;
 
             options = $.extend({}, default_options, options);
             if (options.accept) {
@@ -1941,81 +2011,31 @@
             if (path === undefined) {
                 path = '';
             }
+            options.path = path;
+            $('body').find('#upload-file-form').remove();
             form = $(
-                '<form enctype="multipart/form-data" method="post" style="position: absolute; top: -1000px">' +
+                '<form id="upload-file-form" enctype="multipart/form-data" method="post" style="position: absolute; top: -1000px; z-index: 10000;">' +
                     '<input id="inp-btn" type="file" name="file" ' + accept + ' required />' +
                     '<input id="submit-btn" type="submit" value="Submit" />' +
                 '</form>'
             );
             button = form.find('#inp-btn');
+            submit_button = form.find('#submit-btn');
             $('body').append(form);
-            button.on('change', function(e) {
-                var file = e.target.files[0],
-                    submit_button = form.find('#submit-btn');
-                submit_button.submit(function(e) {
-                    var xhr = new XMLHttpRequest(),
-                        formData = new FormData(form.get(0));
-
-                    formData.append("file_name", file.name);
-                    formData.append("path", path);
-                    formData.append("task_id", self.ID);
-                    xhr.open('POST', 'upload', true);
-                    if (options.callback) {
-                        xhr.onload = function(e) {
-                            var response,
-                                data;
-                            if (e.currentTarget.status === 200) {
-                                response = JSON.parse(e.currentTarget.response);
-                                if (response.error) {
-                                    self.alert_error(response.error, {duration: 10});
-                                }
-                                else if (options.callback) {
-                                    data = response.result.data;
-                                    options.callback.call(self, data.file_name, file.name, data.path);
-                                }
-                            }
-                            else {
-                                self.alert_error(e.currentTarget.statusText, {duration: 10})
-                                if (message) {
-                                    self.hide_message(message);
-                                }
-                            }
-                        };
-                    }
-                    if (options.show_progress) {
-                        xhr.upload.onprogress = function(e) {
-                            var percent,
-                                pb =
-                                '<div class="progress">' +
-                                    '<div class="bar" style="width: 0%;"></div>' +
-
-                                '</div>' +
-                                '<div class="percent text-center"></div>';
-                            if (e.loaded === e.total) {
-                                if (message) {
-                                    self.hide_message(message);
-                                }
-                            }
-                            else {
-                                if (!message) {
-                                    message = self.message(pb,
-                                        {margin: "20px 20px", text_center: true, width: 500});
-                                }
-                                else {
-                                    percent = parseInt(100 * e.loaded / e.total, 10) + '%';
-                                    message.find('.bar').width(percent);
-                                    message.find('.percent').html('<b>' + percent + '</b>');
-                                }
-                            }
-                        }
-                    }
-
-                    e.preventDefault();
-                    xhr.send(formData);
-                    form.remove();
-                })
-                submit_button.submit();
-            });
+            if (options.blob) {
+                self.upload_file(options, form);
+                form.remove();
+            }
+            else {
+                button.on('change', function(e) {
+                    options.file_name = e.target.files[0].name;
+                    submit_button.submit();
+                });
+            }
+            submit_button.on('submit', function(e) {
+                self.upload_file(options, form, e);
+                form.remove();
+            })
             button.click();
         },
 
@@ -7963,13 +7983,12 @@
             return result;
         },
 
-        get_image: function(edit_image) {
+        _get_image_size: function(edit_image) {
             var width,
                 height,
-                field_image,
                 value,
-                src,
-                placeholder;
+                field_image,
+                result = {};
             if (this.get_lookup_data_type() === consts.IMAGE) {
                 field_image = this.field_image;
                 value = this.value;
@@ -7995,6 +8014,26 @@
                 else {
                     height += 'px';
                 }
+            }
+            result.width = width;
+            result.height = height;
+            return result
+        },
+
+        _get_image: function(edit_image) {
+            var size,
+                field_image,
+                value,
+                src,
+                placeholder;
+            if (this.get_lookup_data_type() === consts.IMAGE) {
+                size = this._get_image_size(edit_image),
+                field_image = this.field_image;
+                value = this.value;
+                if (this.lookup_item) {
+                    field_image = this.lookup_item[this.lookup_field].field_image;
+                    value = this.lookup_value;
+                }
                 if (field_image.placeholder) {
                     placeholder = 'static/builder/' + field_image.placeholder;
                 }
@@ -8008,10 +8047,10 @@
                     src = 'static/builder/' + value;
                 }
                 if (this.value) {
-                    return '<img src="' + src + '" alt="Image" style="width:' + width + ';height:' + height + '">';
+                    return '<img src="' + src + '" alt="Image" style="width:' + size.width + ';height:' + size.height + '">';
                 }
                 else {
-                    return '<img src="' + placeholder + '" alt="Image placeholder" style="width:' + width + ';height:' + height + '">';
+                    return '<img src="' + placeholder + '" alt="Image placeholder" style="width:' + size.width + ';height:' + size.height + '">';
                 }
             }
         },
@@ -8021,7 +8060,7 @@
             if (this.owner && this.owner.on_field_get_html) {
                 return this.owner.on_field_get_html.call(this.owner, this);
             }
-            return this.get_image();
+            return this._get_image();
         },
 
         get_display_text: function() {
@@ -12173,7 +12212,12 @@
                                     self.field.value = null;
                                 }
                                 else {
-                                    self.field.upload_image();
+                                    if (self.field.field_image.camera) {
+                                        self.init_camera(true);
+                                    }
+                                    else {
+                                        self.field.upload_image();
+                                    }
                                 }
                             }
                         })
@@ -12304,9 +12348,77 @@
             }
         },
 
+        init_camera: function(dblclick) {
+            var self = this;
+            if (this.field.field_image.camera && !this.$video) {
+                if (task._getUserMediaError && dblclick) {
+                    this.field.upload_image();
+                    return;
+                }
+                if (navigator.mediaDevices.getUserMedia) {
+                    navigator.mediaDevices.getUserMedia({video: true})
+                        .then(function(stream) {
+                            var vid,
+                                size = self.field._get_image_size(true);
+                            self.$video = $('<video width="'+ size.width + ' height="'+ size.height + '" autoplay>');
+                            self.$input.bind('destroyed', function() {
+                                try {
+                                    self.$video[0].srcObject.getVideoTracks().forEach(track => video_track.stop());
+                                }
+                                catch (e) {}
+                            });
+                            self.$input.parent().append(self.$video)
+                            self.$input.hide();
+                            vid = self.$video[0];
+                            vid.srcObject = stream
+                            $(vid).on('dblclick', function() {
+                                var $canvas = $('<canvas id="canvas" width="' + self.$video.width() + '" height="' + self.$video.height() + '">'),
+                                    context = $canvas[0].getContext('2d');
+                                $canvas.css('position', 'absolute');
+                                $canvas.css('top', -1000);
+                                $('body').append($canvas);
+                                context.drawImage(vid, 0, 0, $canvas.width(), $canvas.height());
+                                $canvas[0].toBlob(function(blob) {
+                                    $canvas.remove()
+                                    self.field.owner.task.upload(
+                                        {
+                                            blob: blob,
+                                            file_name: self.field.field_name + '.png',
+                                            callback: function(server_file_name, file_name) {
+                                                self.field.value = server_file_name;
+                                                self.$video.hide();
+                                                self.$input.show();
+                                                vid.srcObject.getVideoTracks().forEach(video_track => video_track.stop());
+                                                self.$video.remove();
+                                                self.$video = undefined;
+                                            }
+                                        }
+                                    );
+                                });
+                            });
+                        })
+
+                        .catch(function(err) {
+                            if (!task._getUserMediaError) {
+                                task._getUserMediaError = true;
+                                task.alert_error('Can not connect to the camera');
+                                console.error('The following error occurred when trying to use getUserMedia: ' + err);
+                                if (dblclick) {
+                                    self.field.upload_image();
+                                }
+                            }
+                        });
+                }
+                else {
+                    alert('Sorry, your browser does not support getUserMedia');
+                }
+            }
+        },
+
         update: function(state) {
             var placeholder,
                 focused,
+                self = this,
                 is_changing = this.is_changing;
             if (this.field.field_kind === consts.ITEM_FIELD) {
                 is_changing = this.field.owner.is_changing();
@@ -12321,7 +12433,10 @@
             if (!this.removed && !this.form_closing()) {
                 if (this.field.get_lookup_data_type() === consts.IMAGE) {
                     if (this.$input.html() != this.field.get_html()) {
-                        this.$input.html(this.field.get_image(true));
+                        this.$input.html(this.field._get_image(true));
+                    }
+                    if (!this.field.value) {
+                        this.init_camera();
                     }
                 }
                 else {

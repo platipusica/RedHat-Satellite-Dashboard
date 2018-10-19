@@ -1,3 +1,6 @@
+.select-server form {
+    margin-top: 5px;
+}
 #desc {
     height: 20px;
     overflow: hidden;

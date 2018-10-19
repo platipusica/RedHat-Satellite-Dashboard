@@ -5118,6 +5118,8 @@ function Events6() { // admin.catalogs.sys_items.sys_fields
 		item.create_inputs(item.edit_form.find("#image-interface1"),
 			{fields: ['f_image_view_width', 'f_image_view_height', 'f_image_edit_width', 'f_image_edit_height'], col_count: 2, label_size: 2});
 		item.create_inputs(item.edit_form.find("#image-interface2"),
+			{fields: ['f_image_camera'], col_count: 1, label_size: 2});
+		item.create_inputs(item.edit_form.find("#image-interface3"),
 			{fields: ['f_image_placeholder']});
 	
 		update_iterface_tab(item);

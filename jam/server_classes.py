@@ -80,7 +80,7 @@ class ServerDataset(Dataset, SQL):
         master_field=None, alignment=None, lookup_values=None, enable_typeahead=False, field_help=None,
         field_placeholder=None, lookup_field1=None, lookup_field2=None, db_field_name=None, field_mask=None,
         image_edit_width=None, image_edit_height=None, image_view_width=None, image_view_height=None,
-        image_placeholder=None, file_download_btn=None, file_open_btn=None, file_accept=None):
+        image_placeholder=None, image_camera=None, file_download_btn=None, file_open_btn=None, file_accept=None):
 
         if db_field_name == None:
             db_field_name = field_name.upper()
@@ -89,7 +89,7 @@ class ServerDataset(Dataset, SQL):
             lookup_field1, lookup_field2, visible, index, edit_visible, edit_index, read_only, expand, word_wrap, size,
             default_value, default, calculated, editable, master_field, alignment, lookup_values, enable_typeahead,
             field_help, field_placeholder, field_mask, image_edit_width, image_edit_height, image_view_width, image_view_height,
-            image_placeholder, file_download_btn, file_open_btn, file_accept, db_field_name)
+            image_placeholder, image_camera, file_download_btn, file_open_btn, file_accept, db_field_name)
         field = DBField(self, field_def)
         self._fields.append(field)
         return field

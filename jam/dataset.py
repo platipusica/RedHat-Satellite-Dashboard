@@ -1054,7 +1054,7 @@ class AbstractDataSet(object):
             lookup_field1, lookup_field2, view_visible, view_index, edit_visible, edit_index, read_only, expand,
             word_wrap, field_size, default_value, is_default, calculated, editable, master_field, alignment,
             lookup_values, enable_typeahead, field_help, field_placeholder, field_mask,
-            image_edit_width, image_edit_height, image_view_width, image_view_height, image_placeholder,
+            image_edit_width, image_edit_height, image_view_width, image_view_height, image_placeholder, image_camera,
             file_download_btn, file_open_btn, file_accept, db_field_name):
         field_def = [None for i in range(len(FIELD_DEF))]
         field_def[FIELD_ID] = field_ID
@@ -1087,7 +1087,8 @@ class AbstractDataSet(object):
         field_def[FIELD_MASK] = field_mask
         if data_type == common.IMAGE:
             field_def[FIELD_IMAGE] = {'edit_width': image_edit_width, 'edit_height': image_edit_height,
-                'view_width': image_view_width, 'view_height': image_view_height, 'placeholder': image_placeholder}
+                'view_width': image_view_width, 'view_height': image_view_height, 'placeholder': image_placeholder,
+                'camera': image_camera}
         if data_type == common.FILE:
             field_def[FIELD_FILE] = {'download_btn': file_download_btn, 'open_btn': file_open_btn, 'accept': file_accept}
         field_def[DB_FIELD_NAME] = db_field_name
