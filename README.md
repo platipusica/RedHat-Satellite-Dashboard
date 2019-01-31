@@ -15,6 +15,19 @@ To get you going with Jam.py 4.x, please visit https://goo.gl/j81uDW for short 1
 
 ![Example jam.py Satellite Login details](https://user-images.githubusercontent.com/9026100/31700470-2f225d8a-b3fc-11e7-8085-285e51164a88.png  "Example jam.py Satellite Login details")
 
+How was this Demo published on Heroku?
+------------------------------------
+The Satellite App you see on Heroku is just the Jam.py Project with two files added: requirements.txt and Procfile.
+
+Then the Heroku account was open, jampy App created, Git repo linked and deployed. In 10 seconds it magically appeared as a live Web site. 
+
+My second Jam.py App lives here: http://jampy-aliases.herokuapp.com
+
+My third Jam.py App lives here: https://sambashares.herokuapp.com
+
+The same principles apply.
+
+
 What does a report look like?
 =============================
 
