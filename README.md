@@ -7,6 +7,10 @@ if anyone still using the Satellite 5.x from RedHat, this might be interesting D
 How does it work?
 =================
 
+Please visit Heroku App:
+
+https://redhatsatellite.herokuapp.com
+
 Please visit https://goo.gl/j81uDW for short 13 slides Jam.py v4.x presentation to get you going. Basically, only Satellite db login info, a bit of c/p and a few imported tables are needed for this app:
 
 ![Example jam.py Satellite Login details](https://user-images.githubusercontent.com/9026100/31700470-2f225d8a-b3fc-11e7-8085-285e51164a88.png  "Example jam.py Satellite Login details")
