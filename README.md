@@ -11,7 +11,7 @@ Please visit Heroku App:
 
 https://redhatsatellite.herokuapp.com
 
-To get you going with Jam.py, please visit https://goo.gl/j81uDW for short 13 slides presentation. Basically, only Satellite db login info, a bit of c/p and a few imported tables are needed for this app:
+To get you going with Jam.py 4.x, please visit https://goo.gl/j81uDW for short 13 slides presentation. Basically, only Satellite db login info, a bit of c/p and a few imported tables are needed for this app:
 
 ![Example jam.py Satellite Login details](https://user-images.githubusercontent.com/9026100/31700470-2f225d8a-b3fc-11e7-8085-285e51164a88.png  "Example jam.py Satellite Login details")
 
