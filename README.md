@@ -11,6 +11,11 @@ Please visit Heroku App:
 
 https://redhatsatellite.herokuapp.com
 
+or 
+http://jampyapplicationbuilder.com/
+
+for more info.
+
 To get you going with Jam.py 4.x, please visit https://goo.gl/j81uDW for short 13 slides presentation. Basically, only Satellite db login info, a bit of c/p and a few imported tables are needed for this app:
 
 ![Example jam.py Satellite Login details](https://user-images.githubusercontent.com/9026100/31700470-2f225d8a-b3fc-11e7-8085-285e51164a88.png  "Example jam.py Satellite Login details")
@@ -21,9 +26,11 @@ The Satellite App you see on Heroku is just the Jam.py Project with two files ad
 
 Then the Heroku account was open, jampy App created, Git repo linked and deployed. In 10 seconds it magically appeared as a live Web site. 
 
-My second Jam.py App lives here: http://jampy-aliases.herokuapp.com
+My 2nd Jam.py App lives here: http://jampy-aliases.herokuapp.com
 
-My third Jam.py App lives here: https://sambashares.herokuapp.com
+My 3rd Jam.py App lives here: https://sambashares.herokuapp.com
+
+My 4th Jam.py App lives here: https://jampy.pythonanywhere.com/
 
 The same principles apply.
 
